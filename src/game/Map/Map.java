@@ -1,21 +1,23 @@
 package Map;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Vector;
+
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import GameObjects.Bomb.Bomb;
 import Settings.Settings;
 
 public class Map extends ApplicationAdapter {
     private static Map INSTANCE = null;
     private Vector2 size;
     private Vector2 position;
-
-    private Bomb bomb;
-
-    Texture texture;
+    private Vector2 gradeSize;
+    private Vector<Vector<Block>> blocks;
 
     private Map(){
         this.create();
@@ -25,9 +27,28 @@ public class Map extends ApplicationAdapter {
     public void create(){
         this.setDimensions();
 
-        this.bomb = new Bomb(new Vector2(100, 100));
+        this.blocks = new Vector<Vector<Block>>();
 
-        this.texture = new Texture("assets/a.png");
+        Vector<Vector<Integer>> mapMatrix = this.openMap("map1");
+
+        for (int i = 0; i < gradeSize.x; i++) {
+            Vector<Block> line = new Vector<Block>();
+            for(int j = 0; j < gradeSize.y; j++){
+                line.add(new Block(
+                    new Vector2(
+                        this.position.x + Settings.BLOCKS_SIZE * i,
+                        this.position.y + Settings.BLOCKS_SIZE * j
+                    ),
+                    new Vector2(
+                        i,
+                        j
+                    ),
+                    (mapMatrix.get(i)).get(j)
+                ));
+
+            }
+            this.blocks.add(line);
+        }
     }
 
     private void setDimensions() {
@@ -40,8 +61,8 @@ public class Map extends ApplicationAdapter {
         }
 
         this.size = new Vector2(
-            (int)(small * 0.8f),
-            (int)(small * 0.8f)
+            ((int)(small / Settings.BLOCKS_SIZE) - 1) * Settings.BLOCKS_SIZE,
+            ((int)(small / Settings.BLOCKS_SIZE) - 1) * Settings.BLOCKS_SIZE
         );
 
         this.position = new Vector2(
@@ -49,23 +70,72 @@ public class Map extends ApplicationAdapter {
             (int)((Settings.WINDOW_HEIGHT / 2) - (this.size.y / 2))
         );
 
-        System.out.println("\nwindow: " + Settings.WINDOW_WIDTH + ", " + Settings.WINDOW_HEIGHT + "\nsize: " + this.size.x + ", " + this.size.y + "\nposition: " + this.position.x + ", " + this.position.y);
+        this.gradeSize = new Vector2(
+            (int)(this.size.x / Settings.BLOCKS_SIZE),
+            (int)(this.size.y / Settings.BLOCKS_SIZE )
+        );
     }
 
     public void draw(SpriteBatch batch){
-        batch.draw(texture, this.position.x, this.position.y, 500, 500);
-        bomb.draw(batch);
+        for(Vector<Block> line : this.blocks){
+            for(Block block : line){
+                block.draw(batch);
+            }
+        }
     }
 
     public void update(){
-        bomb.update();
+        for(Vector<Block> line : this.blocks){
+            for(Block block : line){
+                block.update();
+            }
+        }
+    }
+
+    public Vector<Vector<Integer>> openMap(String mapName) {
+        String mapPath = "maps/" + mapName + ".map";
+        BufferedReader buffer = null;
+        String line = "";
+
+        Vector<Vector<Integer>> mapMatrix = new Vector<Vector<Integer>>();
+
+        try {
+
+            buffer = new BufferedReader(new FileReader(mapPath));
+            while ((line = buffer.readLine()) != null) {
+
+                String[] splitedLine = line.split(",");
+                
+                Vector<Integer> integerLine = new Vector<Integer>();
+                
+                for(String field : splitedLine){
+                    integerLine.add(Integer.parseInt(field));
+                }
+
+                mapMatrix.add(integerLine);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (buffer != null) {
+                try {
+                    buffer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return mapMatrix;
     }
 
     @Override
-    public void dispose(){
-    }
+    public void dispose(){/* Nothing to dispose */}
 
-    public static Map getIntance() {
+    public static Map getInstance() {
         if(INSTANCE == null){
             INSTANCE = new Map();
         }

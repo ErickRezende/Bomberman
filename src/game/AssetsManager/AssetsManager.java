@@ -31,6 +31,10 @@ public class AssetsManager extends ApplicationAdapter {
 
         // Carrega as texturas
         assetManager.load("assets/bomb.png", Texture.class);
+        assetManager.load("assets/block-0.png", Texture.class);
+        assetManager.load("assets/block-1.png", Texture.class);
+        assetManager.load("assets/block-2.png", Texture.class);
+
         //assetManager.load("musicPath.png", Texture.class);
 
         // Espera que todos os assets sejam carregados
@@ -38,6 +42,9 @@ public class AssetsManager extends ApplicationAdapter {
 
         // Obter as texturas carregadas
         textures.put("Bomb", assetManager.get("assets/bomb.png", Texture.class));
+        textures.put("Block-0", assetManager.get("assets/block-0.png", Texture.class));
+        textures.put("Block-1", assetManager.get("assets/block-1.png", Texture.class));
+        textures.put("Block-2", assetManager.get("assets/block-2.png", Texture.class));
 
         //sounds.put("Name", assetManager.get("musicPath.mp3", Music.class));        
         

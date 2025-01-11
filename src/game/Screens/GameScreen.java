@@ -1,42 +1,35 @@
-import com.badlogic.gdx.ApplicationAdapter;
+package Screens;
+
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import AssetsManager.AssetsManager;
-import Map.Map;
+import Screens.Stages.GameStage;
 
-public class Game extends ApplicationAdapter{
-    private static ApplicationAdapter INSTANCE = null;
-    private Map map;
-    private SpriteBatch batch;
+public class GameScreen implements Screen {
+    private static GameScreen INSTANCE = null;
     private AssetsManager assetsManager;
+    private Stage stage;
 
-    private Game(){}
-
-    @Override
-    public void create(){
-        assetsManager = AssetsManager.getInstance();
-
-        this.map = Map.getIntance();
-        this.batch = new SpriteBatch();
+    private GameScreen(){
+        this.stage = GameStage.getInstance();
+        this.assetsManager = AssetsManager.getInstance();
     }
 
     public void update(float deltaTime){
+        this.stage.act(deltaTime);
         this.assetsManager.update(deltaTime);
-        this.map.update();
     }
     
     public void draw(){
-        batch.begin();
-        {
-            this.map.draw(batch);
-        }
-        batch.end();
+        stage.draw();
     }
 
     @Override
-    public void render(){
+    public void render(float deltaTime){
         this.update(0);
 
         // Clear the screen with a black color before draw
@@ -56,15 +49,21 @@ public class Game extends ApplicationAdapter{
     public void resume(){/* Nothing to do */} 
 
     @Override
+    public void show(){/* Nothing to do */} 
+
+    @Override
+    public void hide(){/* Nothing to do */} 
+
+
+    @Override
     public void dispose(){
-        this.batch.dispose();
-        this.map.dispose();
+        this.stage.dispose();
         this.assetsManager.dispose();
     }
 
-    public static ApplicationAdapter getIntance() {
+    public static GameScreen getInstance() {
         if(INSTANCE == null){
-            INSTANCE = new Game();
+            INSTANCE = new GameScreen();
         }
 
         return INSTANCE;
