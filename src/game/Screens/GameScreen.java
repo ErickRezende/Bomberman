@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import AssetsManager.AssetsManager;
 import Screens.Stages.GameStage;
+import Screens.Stages.LobbyStage;
 
 public class GameScreen implements Screen {
     private static GameScreen INSTANCE = null;
@@ -30,7 +31,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime){
-        this.update(0);
+        this.update(deltaTime);
 
         // Clear the screen with a black color before draw
 		Gdx.gl.glClearColor(0, 0, 0, 1);
