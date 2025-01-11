@@ -1,55 +1,60 @@
 package GameObjects.Player;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
+import Map.Map;
+import Map.Block;
 import AssetsManager.AssetsManager;
 import GameObjects.base.GameObject;
- 
-public class Player extends GameObject{
-    AssetsManager assetsManager; 
-    private static final float SPEED = 200f;
-    private int Playerbombs;
 
-    public Player(Vector2 position){
-        super(new Vector2(position.x, position.y), new Vector2(64, 64));
+public class Player extends GameObject {
+    private float moveCooldown = 0.1f; // Tempo mínimo entre movimentos (em segundos)
+    private float cooldownTimer = 0f;
 
-        assetsManager = AssetsManager.getInstance();
+    public Player(Vector2 position) {
+        super(position, new Vector2(64, 64)); 
 
+        AssetsManager assetsManager = AssetsManager.getInstance();
+        
         super.texture = assetsManager.getTexture("Player");
     }
 
+    
     public void update(float delta) {
-        move(delta);
-    }
+        cooldownTimer -= delta; // Reduz o tempo de cooldown baseado no delta time
+        if (cooldownTimer > 0) return; // Aguarda o cooldown terminar antes de permitir o movimento
 
-    private void move(float delta) {
-        float movement = SPEED * delta; // Calcula o deslocamento baseado no tempo delta
+        Map map = Map.getInstance();
+        Vector2 newPosition = new Vector2(position); // Nova posição hipotética
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            position.y += movement; 
+        // Movimenta baseado no input
+        boolean moved = false;
+        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            newPosition.y += 64;
+            moved = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            position.y -= movement; 
+        if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            newPosition.y -= 64;
+            moved = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            position.x -= movement; 
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            newPosition.x -= 64;
+            moved = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            position.x += movement; 
+        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            newPosition.x += 64;
+            moved = true;
         }
 
-        // Evitar que o jogador saia da tela
-        keepInside();
-    }
-
-    private void keepInside() {
-        // Limite mínimo/máximo para o jogador não sair da tela
-        position.x = Math.max(0, Math.min(position.x, Gdx.graphics.getWidth() - size.x));
-        position.y = Math.max(0, Math.min(position.y, Gdx.graphics.getHeight() - size.y));
-    }
-
-    private void MoreSpeed(){
-
+        // Checa se a nova posição está em um bloco válido
+        if (moved) {
+            Block nextBlock = map.getBlockAt(newPosition);
+            if (nextBlock != null && nextBlock.type == Block.VOID) {
+                position.set(newPosition); 
+                cooldownTimer = moveCooldown; // Reseta o cooldown após o movimento
+            }
+        }
     }
 }

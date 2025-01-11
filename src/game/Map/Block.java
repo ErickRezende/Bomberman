@@ -11,7 +11,7 @@ public class Block extends GameObject{
     public static final int BOX = 1;
     public static final int WALL = 2;
 
-    int type;
+    public int type;
     Vector2 gradePos;
 
     public Block(Vector2 position, Vector2 gradePos, int type){

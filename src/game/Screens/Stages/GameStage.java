@@ -20,7 +20,7 @@ public class GameStage extends Stage {
         this.batch = new SpriteBatch();
 
         // Inicializa o jogador
-        this.player = new Player(new Vector2(200, 200)); // Posição inicial (100, 100)
+        this.player = new Player(new Vector2(160, 160)); // Posição inicial (100, 100)
     }
 
     @Override

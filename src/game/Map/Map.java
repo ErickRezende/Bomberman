@@ -50,6 +50,17 @@ public class Map extends ApplicationAdapter {
             this.blocks.add(line);
         }
     }
+    public Block getBlockAt(Vector2 position) {
+        // Converte posição para coordenadas na grade
+        int gridX = (int) ((position.x - this.position.x) / Settings.BLOCKS_SIZE);
+        int gridY = (int) ((position.y - this.position.y) / Settings.BLOCKS_SIZE);
+
+        // Verifica se a posição está dentro dos limites da grade
+        if (gridX >= 0 && gridX < gradeSize.x && gridY >= 0 && gridY < gradeSize.y) {
+            return blocks.get(gridX).get(gridY); // Retorna o bloco na posição
+        }
+        return null; // Fora dos limites
+    }
 
     private void setDimensions() {
         int small;
