@@ -1,17 +1,23 @@
 package GameObjects.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import Map.Map;
 import Map.Block;
 import AssetsManager.AssetsManager;
+import GameObjects.Bomb.Bomb;
 import GameObjects.base.GameObject;
 
 public class Player extends GameObject {
     private float moveCooldown = 0.1f; // Tempo mínimo entre movimentos (em segundos)
     private float cooldownTimer = 0f;
+    private List<Bomb> bombs;
 
     public Player(Vector2 position) {
         super(position, new Vector2(64, 64)); 
@@ -19,6 +25,8 @@ public class Player extends GameObject {
         AssetsManager assetsManager = AssetsManager.getInstance();
         
         super.texture = assetsManager.getTexture("Player");
+
+        bombs = new ArrayList<>();
     }
 
     
@@ -47,6 +55,11 @@ public class Player extends GameObject {
             newPosition.x += 64;
             moved = true;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            Bomb newBomb = new Bomb(new Vector2(position));
+            bombs.add(newBomb); // Adiciona a bomba à lista
+            System.out.println("Bomba criada na posição: " + position);
+        }
 
         // Checa se a nova posição está em um bloco válido
         if (moved) {
@@ -56,5 +69,20 @@ public class Player extends GameObject {
                 cooldownTimer = moveCooldown; // Reseta o cooldown após o movimento
             }
         }
+         // Atualiza todas as bombas
+        for (Bomb bomb : bombs) {
+            bomb.update(delta);
+        }
     }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        super.draw(batch); // Desenha o jogador
+
+        // Desenha todas as bombas
+        for (Bomb bomb : bombs) {
+            bomb.draw(batch);
+        }
+    }
+    
 }

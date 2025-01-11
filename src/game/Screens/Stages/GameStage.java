@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import GameObjects.Bomb.Bomb;
 import GameObjects.Player.Player;
 import Map.Map;
 
@@ -14,15 +13,12 @@ public class GameStage extends Stage {
     private Map map;
     private SpriteBatch batch;
 
-    private Bomb bomb;
-
     private Player player; // Adiciona o jogador
 
     private GameStage(){
         this.map = Map.getInstance();
         this.batch = new SpriteBatch();
 
-        this.bomb = new Bomb(new Vector2(160, 160));
 
         // Inicializa o jogador
         this.player = new Player(new Vector2(160, 160)); // Posição inicial (100, 100)
@@ -33,7 +29,6 @@ public class GameStage extends Stage {
         // Atualiza mapa e jogador
         this.map.update();
         this.player.update(deltaTime);
-        this.bomb.update(deltaTime);
     }
     
     @Override
@@ -42,7 +37,6 @@ public class GameStage extends Stage {
         {
             this.map.draw(batch); // Desenha o mapa
             this.player.draw(batch); // Desenha o jogador
-            this.bomb.draw(batch);
         }
         batch.end();
     }
