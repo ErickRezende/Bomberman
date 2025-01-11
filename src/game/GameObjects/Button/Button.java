@@ -11,7 +11,7 @@ public class Button extends GameObject{
     public static final float CENTER = 0.5f;
     public static final float BOTTOM = 0.0f, LEFT = 0.0f;
     public static final float RIGHT = 1.0f, TOP = 1.0f;
-    
+
     public Button(Vector2 size, float xRelativePos, float yRelativePos, String texture){
         this(
             new Vector2(
@@ -35,9 +35,15 @@ public class Button extends GameObject{
         super.texture = AssetsManager.getInstance().getTexture(texture);
     }
 
-    @Override
-    public void update() {
-        if(Gdx.input.isTouched())
-            System.out.println(Gdx.input.getX() + ", " + Gdx.input.getY());
+    public boolean isClicked() {
+        if(
+            Gdx.input.isTouched() &&
+            Gdx.input.getX() > this.position.x  && Gdx.input.getX() < this.position.x + this.size.x &&
+            (Settings.WINDOW_HEIGHT - Gdx.input.getY()) > this.position.y  && (Settings.WINDOW_HEIGHT - Gdx.input.getY()) < this.position.y + this.size.y
+        ){
+            return true;
+        }
+
+        return false;
     }
 }
