@@ -7,6 +7,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -80,14 +81,13 @@ public class AssetsManager extends ApplicationAdapter {
     }
 
     
-    // Debugar isso aqui pq esse libgdx fumou peda
-    /*public Animation<> getAnimation(TextureRegion[][] textureRegion, int line, float frameDuration) {
-        return (new Animation<TextureRegion>(frameDuration, textureRegion[line]));
+    public Animation getAnimation(TextureRegion[][] textureRegion, int line, float frameDuration) {
+        return (new Animation(frameDuration, textureRegion[line]));
     }
 
-    public TextureRegion getCurrentTRegion(Animation<TextureRegion> animation) {
+    public TextureRegion getCurrentTRegion(Animation animation) {
         return animation.getKeyFrame(stateTime, true);
-    }*/
+    }
 
     @Override
     public void dispose() {
