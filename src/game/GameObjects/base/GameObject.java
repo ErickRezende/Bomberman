@@ -42,9 +42,9 @@ public abstract class GameObject {
         return this.size;
     }
 
-    /*public TextureRegion getCurrentTRegion() {
+    public TextureRegion getCurrentTRegion() {
         return this.currentTRegion;
-    }*/
+    }
 
     public void dispose() {/* Nothing to dispose */}
 }

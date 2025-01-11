@@ -55,7 +55,7 @@ public class Player extends GameObject {
             newPosition.x += 64;
             moved = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             Bomb newBomb = new Bomb(new Vector2(position));
             bombs.add(newBomb); // Adiciona a bomba à lista
             System.out.println("Bomba criada na posição: " + position);
@@ -72,6 +72,15 @@ public class Player extends GameObject {
          // Atualiza todas as bombas
         for (Bomb bomb : bombs) {
             bomb.update(delta);
+        }
+
+        // Sim, tem que ter outro se seu fiz assim é pq é assim
+        // Vou explicar so pq to bonzinho: é por causa do break
+        for (Bomb bomb : bombs) {
+            if(bomb.isTimeForBoom()){
+                bombs.remove(bomb);
+                break;
+            }
         }
     }
 

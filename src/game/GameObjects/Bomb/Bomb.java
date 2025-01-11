@@ -7,7 +7,9 @@ import AssetsManager.AssetsManager;
 import GameObjects.base.GameObject;
 
 public class Bomb extends GameObject {
-    AssetsManager assetsManager; 
+    private AssetsManager assetsManager; 
+
+    private float timeToBoom = 3.0f;
 
     public Bomb(Vector2 position){
         super(new Vector2(position.x, position.y), new Vector2(64, 64));
@@ -21,6 +23,17 @@ public class Bomb extends GameObject {
 
     @Override
     public void draw(SpriteBatch batch) {
-        batch.draw(this.currentTRegion, this.position.x, this.position.y, (int)this.size.x, (int)this.size.y);
+        batch.draw(this.currentTRegion, this.position.x, this.position.y, (int)this.size.x, (int)this.size.y);        
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+
+        timeToBoom -= deltaTime;
+    }
+
+    public boolean isTimeForBoom(){
+        return (timeToBoom <= 0);
     }
 }
