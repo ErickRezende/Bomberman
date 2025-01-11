@@ -3,23 +3,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import AssetsManager.AssetsManager;
 import Map.Map;
-import Settings.Settings;
 
 public class Game extends ApplicationAdapter{
     private static ApplicationAdapter INSTANCE = null;
     private Map map;
     private SpriteBatch batch;
+    private AssetsManager assetsManager;
 
     private Game(){}
 
     @Override
     public void create(){
+        assetsManager = AssetsManager.getInstance();
+
         this.map = Map.getIntance();
         this.batch = new SpriteBatch();
     }
 
-    public void update(){
+    public void update(float deltaTime){
+        this.assetsManager.update(deltaTime);
         this.map.update();
     }
     
@@ -33,7 +37,7 @@ public class Game extends ApplicationAdapter{
 
     @Override
     public void render(){
-        this.update();
+        this.update(0);
 
         // Clear the screen with a black color before draw
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -43,12 +47,7 @@ public class Game extends ApplicationAdapter{
     }
 
     @Override
-    public void resize(int width, int height){
-        Settings.WINDOW_HEIGHT = height;
-        Settings.WINDOW_WIDTH = width;
-
-        this.map.resize(width, height);
-    }
+    public void resize(int width, int height){/* Nothing to do */}
 
     @Override 
     public void pause(){/* Nothing to do */}
@@ -60,6 +59,7 @@ public class Game extends ApplicationAdapter{
     public void dispose(){
         this.batch.dispose();
         this.map.dispose();
+        this.assetsManager.dispose();
     }
 
     public static ApplicationAdapter getIntance() {

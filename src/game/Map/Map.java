@@ -4,12 +4,16 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+
+import GameObjects.Bomb.Bomb;
 import Settings.Settings;
 
 public class Map extends ApplicationAdapter {
     private static Map INSTANCE = null;
     private Vector2 size;
     private Vector2 position;
+
+    private Bomb bomb;
 
     Texture texture;
 
@@ -20,6 +24,8 @@ public class Map extends ApplicationAdapter {
     @Override
     public void create(){
         this.setDimensions();
+
+        this.bomb = new Bomb(new Vector2(100, 100));
 
         this.texture = new Texture("assets/a.png");
     }
@@ -48,13 +54,11 @@ public class Map extends ApplicationAdapter {
 
     public void draw(SpriteBatch batch){
         batch.draw(texture, this.position.x, this.position.y, 500, 500);
+        bomb.draw(batch);
     }
 
-    public void update(){}
-
-    @Override
-    public void resize(int width, int height){
-        this.setDimensions();
+    public void update(){
+        bomb.update();
     }
 
     @Override
