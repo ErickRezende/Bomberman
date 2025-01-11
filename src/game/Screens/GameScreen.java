@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import AssetsManager.AssetsManager;
-import Screens.Stages.GameStage;
 import Screens.Stages.LobbyStage;
 
 public class GameScreen implements Screen {
@@ -16,7 +15,7 @@ public class GameScreen implements Screen {
     private Stage stage;
 
     private GameScreen(){
-        this.stage = GameStage.getInstance();
+        this.stage = LobbyStage.getInstance();
         this.assetsManager = AssetsManager.getInstance();
     }
 
@@ -55,6 +54,9 @@ public class GameScreen implements Screen {
     @Override
     public void hide(){/* Nothing to do */} 
 
+    public void setStage(Stage stage){
+        this.stage = stage;
+    }
 
     @Override
     public void dispose(){

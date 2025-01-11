@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import GameObjects.Button.Button;
+import Screens.GameScreen;
 
 public class LobbyStage extends Stage {
     private static Stage INSTANCE = null;
@@ -21,7 +22,9 @@ public class LobbyStage extends Stage {
 
     @Override
     public void act(float deltaTime){ // update
-        button.update();
+        if(button.isClicked()) {
+            GameScreen.getInstance().setStage(GameStage.getInstance());
+        }
     }
     
     @Override
