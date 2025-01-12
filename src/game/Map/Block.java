@@ -26,6 +26,10 @@ public class Block extends GameObject{
         super.texture = (AssetsManager.getInstance()).getTexture("Block-" + type);
     }
 
+    public Vector2 getGradePos(){
+        return this.gradePos;
+    }
+
     public int getType(){
         return this.type;
     }

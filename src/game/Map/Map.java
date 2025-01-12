@@ -116,11 +116,11 @@ public class Map extends ApplicationAdapter {
     }
 
     public Vector2 getBlockPosByPxls(Vector2 posPxls) {
-        return new Vector2(posPxls.x / Settings.BLOCKS_SIZE, posPxls.y / Settings.BLOCKS_SIZE);
+        return this.getBlockByPxls(posPxls).getGradePos();
     }
 
-    public Vector2 getLastBlock(){
-        return this.blocks.get(this.blocks.size() - 1).get(this.blocks.get(0).size() - 1).getPosition();
+    public Block getLastBlock(){
+        return this.blocks.get(this.blocks.size() - 1).get(this.blocks.get(0).size() - 1);
     }
 
     public Block getBlock(Vector2 pos){

@@ -17,6 +17,7 @@ public class Explosion extends GameObject{
     Vector<Animation> animations;
 
     Vector<Integer> directionsPower;
+    Vector<Block> blocksToBoom;
 
     int power;
 
@@ -30,6 +31,8 @@ public class Explosion extends GameObject{
         this.animations = new Vector<Animation>();
         this.currentTRegions = new Vector<TextureRegion>();
         this.directionsPower = new Vector<Integer>();
+
+        blocksToBoom = new Vector<Block>();
     
         map = Map.getInstance();
         AssetsManager assetsManager = AssetsManager.getInstance();
@@ -51,6 +54,10 @@ public class Explosion extends GameObject{
             this.animations.add(assetsManager.getAnimation(textureRegions, line, frameDuration));
             this.currentTRegions.add(textureRegions[line][0]);
         }
+
+        this.setPowerDirections();
+
+        System.out.println(this.directionsPower);
     }
 
     @Override
@@ -65,54 +72,67 @@ public class Explosion extends GameObject{
         for(int i = 0; i < this.currentTRegions.size(); i++){
             batch.draw(this.currentTRegions.get(i), this.position.x, this.position.y - i * this.size.y, (int)this.size.x, (int)this.size.y);        
         }
+
+        for(int i  = 0; i < this.directionsPower.size(); i++){
+            Vector2 pos;
+            switch (i) {
+                case 0:
+                    pos  = new Vector2(-1, 0) ;
+                    break;
+            
+                case 1:
+                    pos  = new Vector2(0, -1) ;
+                    break;
+
+                case 2:
+                    pos  = new Vector2(0, 1) ;
+                    break;
+
+                case 3:
+                    pos  = new Vector2(1, 0) ;
+                    break;
+
+
+                default:
+                    break;
+            }
+
+
+            for(int j = 0; j < this.directionsPower.get(i); j++){
+                batch.draw(this.currentTRegions.get(j), this.position.x, this.position.y - j * this.size.y, (int)this.size.x, (int)this.size.y);        
+            }
+        }
+
     }
 
     private void setPowerDirections(){
-        for(int i = 0; i < 4; i++) {
-            this.directionsPower.add(this.power);
-        }
+        Vector2 pos = map.getBlockPosByPxls(this.position);
 
-        // RIGHT
-        for(int i = 0; i <= this.directionsPower.get(0); i++){
-            Vector2 pos = map.getBlockPosByPxls(this.position);
-            pos.x += i;
+        // Hoje eu e Deus sabemos sabemos com isso funciona, amanhã só Ele
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                if((i != 0 && j != 0) || (i == 0 && j == 0)){
+                    continue;
+                }
+                
+                
+                int cont = 0;
+                for(int k = 1; k < this.power; k++){
+                    if(
+                        pos.x + i*k < 0 ||
+                        pos.y + j*k < 0 ||
+                        pos.x + i*k > map.getLastBlock().getGradePos().x ||
+                        pos.y + j*k > map.getLastBlock().getGradePos().y ||
+                        map.getBlock(new Vector2(pos.x + i*k, pos.y + j*k)).getType() == Block.WALL
+                    ){
+                        break;
+                    }
 
-            if(pos.x > map.getBlock(pos).getPosition().x || map.getBlock(pos).getType() == Block.WALL){
-                this.directionsPower.set(0, i);
-                break;
-            }
-        }
+                    map.getBlock(new Vector2(pos.x + i*k, pos.y + j*k)).setType(Block.VOID);
+                    cont++;
+                }
 
-        // TOP
-        for(int i = 0; i <= this.directionsPower.get(1); i++){
-            Vector2 pos = map.getBlockPosByPxls(this.position);
-            pos.y += i;
-
-            if(pos.y > map.getBlock(pos).getPosition().y || map.getBlock(pos).getType() == Block.WALL){
-                this.directionsPower.set(1, i);
-                break;
-            }
-        }
-
-        // LEFT
-        for(int i = 0; i <= this.directionsPower.get(2); i++){
-            Vector2 pos = map.getBlockPosByPxls(this.position);
-            pos.x -= i;
-
-            if(pos.x < 0 || map.getBlock(pos).getType() == Block.WALL){
-                this.directionsPower.set(2, i);
-                break;
-            }
-        }
-
-        // TOP
-        for(int i = 0; i <= this.directionsPower.get(3); i++){
-            Vector2 pos = map.getBlockPosByPxls(this.position);
-            pos.y -= i;
-
-            if(pos.y < 0 || map.getBlock(pos).getType() == Block.WALL){
-                this.directionsPower.set(3, i);
-                break;
+                this.directionsPower.add(cont);
             }
         }
     }
