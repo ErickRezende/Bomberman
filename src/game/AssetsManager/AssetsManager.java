@@ -32,6 +32,7 @@ public class AssetsManager extends ApplicationAdapter {
 
         // Carrega as texturas
         assetManager.load("assets/bomb.png", Texture.class);
+        assetManager.load("assets/explosion.png", Texture.class);
         assetManager.load("assets/player.png", Texture.class);
         assetManager.load("assets/block-0.png", Texture.class);
         assetManager.load("assets/block-1.png", Texture.class);
@@ -45,6 +46,7 @@ public class AssetsManager extends ApplicationAdapter {
 
         // Obter as texturas carregadas
         textures.put("Bomb", assetManager.get("assets/bomb.png", Texture.class));
+        textures.put("Boom", assetManager.get("assets/explosion.png", Texture.class));
         textures.put("Player", assetManager.get("assets/player.png", Texture.class));
         textures.put("Block-0", assetManager.get("assets/block-0.png", Texture.class));
         textures.put("Block-1", assetManager.get("assets/block-1.png", Texture.class));
@@ -71,9 +73,11 @@ public class AssetsManager extends ApplicationAdapter {
     }
 
     public TextureRegion[][] getTextureRegions(String key, Vector2 size) {
-        return TextureRegion.split(textures.get(key),
-                /* textures.get(key).getWidth() / 4 */ (int) size.x,
-                /* textures.get(key).getHeight() / 6 */(int) size.y);
+        return TextureRegion.split(
+            textures.get(key),
+            (int) size.x,
+            (int) size.y
+        );
     }
 
     public TextureRegion[][] getTextureRegions(String key) {
@@ -87,6 +91,10 @@ public class AssetsManager extends ApplicationAdapter {
 
     public TextureRegion getCurrentTRegion(Animation animation) {
         return animation.getKeyFrame(stateTime, true);
+    }
+
+    public TextureRegion getCurrentTRegion(Animation animation, boolean looping) {
+        return animation.getKeyFrame(stateTime, looping);
     }
 
     @Override

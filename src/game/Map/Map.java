@@ -103,6 +103,30 @@ public class Map extends ApplicationAdapter {
         }
     }
 
+    public Block getBlockByPxls(Vector2 posPxls) {
+        for(Vector<Block> line : this.blocks){
+            for(Block block : line){
+                if(block.getPosition().x == posPxls.x && block.getPosition().y == posPxls.y){
+                    return block;
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    public Vector2 getBlockPosByPxls(Vector2 posPxls) {
+        return new Vector2(posPxls.x / Settings.BLOCKS_SIZE, posPxls.y / Settings.BLOCKS_SIZE);
+    }
+
+    public Vector2 getLastBlock(){
+        return this.blocks.get(this.blocks.size() - 1).get(this.blocks.get(0).size() - 1).getPosition();
+    }
+
+    public Block getBlock(Vector2 pos){
+        return this.blocks.get((int)pos.x).get((int)pos.y);
+    }
+
     public Vector<Vector<Integer>> openMap(String mapName) {
         String mapPath = "maps/" + mapName + ".map";
         BufferedReader buffer = null;

@@ -25,4 +25,8 @@ public class Block extends GameObject{
         this.type = type;
         super.texture = (AssetsManager.getInstance()).getTexture("Block-" + type);
     }
+
+    public int getType(){
+        return this.type;
+    }
 }

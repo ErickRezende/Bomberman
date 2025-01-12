@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import GameObjects.Explosion.Explosion;
 import GameObjects.Player.Player;
 import Map.Map;
 
@@ -18,7 +19,6 @@ public class GameStage extends Stage {
     private GameStage(){
         this.map = Map.getInstance();
         this.batch = new SpriteBatch();
-
 
         // Inicializa o jogador
         this.player = new Player(new Vector2(160, 160)); // Posição inicial (100, 100)

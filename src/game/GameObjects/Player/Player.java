@@ -12,12 +12,14 @@ import Map.Map;
 import Map.Block;
 import AssetsManager.AssetsManager;
 import GameObjects.Bomb.Bomb;
+import GameObjects.Explosion.Explosion;
 import GameObjects.base.GameObject;
 
 public class Player extends GameObject {
     private float moveCooldown = 0.1f; // Tempo mínimo entre movimentos (em segundos)
     private float cooldownTimer = 0f;
     private List<Bomb> bombs;
+    private List<Explosion> booms;
 
     public Player(Vector2 position) {
         super(position, new Vector2(64, 64)); 
@@ -27,6 +29,7 @@ public class Player extends GameObject {
         super.texture = assetsManager.getTexture("Player");
 
         bombs = new ArrayList<>();
+        booms = new ArrayList<>();
     }
 
     
@@ -78,7 +81,20 @@ public class Player extends GameObject {
         // Vou explicar so pq to bonzinho: é por causa do break
         for (Bomb bomb : bombs) {
             if(bomb.isTimeForBoom()){
+                booms.add(new Explosion(bomb.getPosition(), 3));
                 bombs.remove(bomb);
+                break;
+            }
+        }
+
+        // Atualiza todas as explosoes
+        for (Explosion boom : booms) {
+            boom.update(delta);
+        }
+
+        for (Explosion boom : booms) {
+            if(boom.animationEnds()){
+                booms.remove(boom);
                 break;
             }
         }
@@ -91,6 +107,11 @@ public class Player extends GameObject {
         // Desenha todas as bombas
         for (Bomb bomb : bombs) {
             bomb.draw(batch);
+        }
+
+        // Desenha todas as bombas
+        for (Explosion boom : booms) {
+            boom.draw(batch);
         }
     }
     
